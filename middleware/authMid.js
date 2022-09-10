@@ -3,6 +3,11 @@
 * */
 const service = require('../service/userService');
 const errorType = require('../constants/error-types');
+
+// jwt校验
+const jwt = require('jsonwebtoken');
+const { PUBLIC_KEY } = require('../app/config');
+
 const _md5 = require('../utils/_md5');
 
 const verifyLogin = async (ctx, next) => {
@@ -31,7 +36,22 @@ const verifyLogin = async (ctx, next) => {
 
 // 验证授权
 const verifyAuth = async (ctx, next) => {
+    // 1.获取token
+    const authorization = ctx.headers.authorization;
+    const token = authorization.replace("Bearer", "").trimStart();
+    // 2. 验证token(id/name/iat/exp)
+   try {
+       const result = jwt.verify(token, PUBLIC_KEY, {
+           algorithms: ['RS256'],
+       });
+       ctx.user = result;
+   } catch (e) {
+       const error = new Error(errorType.UNAUTHRIZATION);
+       ctx.app.emit("error", error, ctx);
+   }
 
+    console.log("授权成功~");
+    await next();
 }
 
 module.exports = {
