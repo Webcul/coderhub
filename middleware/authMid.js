@@ -37,7 +37,7 @@ const verifyLogin = async (ctx, next) => {
 // 验证授权
 const verifyAuth = async (ctx, next) => {
     // 1.获取token
-    const authorization = ctx.headers.authorization;
+    const authorization = ctx.headers.authorization || '';
     const token = authorization.replace("Bearer", "").trimStart();
     // 2. 验证token(id/name/iat/exp)
    try {
@@ -45,13 +45,12 @@ const verifyAuth = async (ctx, next) => {
            algorithms: ['RS256'],
        });
        ctx.user = result;
+       await next(); // 验证token成功后再next
    } catch (e) {
        const error = new Error(errorType.UNAUTHRIZATION);
        ctx.app.emit("error", error, ctx);
    }
 
-    console.log("授权成功~");
-    await next();
 }
 
 module.exports = {
