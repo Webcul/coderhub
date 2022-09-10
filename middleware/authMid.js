@@ -25,10 +25,16 @@ const verifyLogin = async (ctx, next) => {
         const error = new Error(errorType.PASSWORD_IS_INCORRENT);
         return ctx.app.emit('error', error, ctx);
     }
-
+    ctx.user = user;
     await next();
+}
+
+// 验证授权
+const verifyAuth = async (ctx, next) => {
+
 }
 
 module.exports = {
     verifyLogin,
+    verifyAuth
 }
