@@ -22,8 +22,18 @@ class momentService {
         const statement = `SELECT m.id id, m.content content, m.createAt createAt, m.updateAt updateAt, JSON_OBJECT('id', u.id, 'name', u.name) user
                             FROM moment m LEFT JOIN user u on m.user_id = u.id limit ?, ?;`;
         const res = await connection.execute(statement, [offest, size]);
-        console.log(res);
         return res[0];
+    }
+    // 更新动态
+    async update(id, content) {
+        try {
+            const statement = `UPDATE moment SET content = '${content}' WHERE id = ${id};`;
+            const [res] = await connection.execute(statement);
+            // console.log(res);
+            return res;
+        } catch (e) {
+            console.log(e)
+        }
     }
 }
 

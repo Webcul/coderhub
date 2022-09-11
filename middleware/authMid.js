@@ -2,6 +2,7 @@
 * 登录授权
 * */
 const service = require('../service/userService');
+const authService = require('../service/authService');
 const errorType = require('../constants/error-types');
 
 // jwt校验
@@ -53,7 +54,23 @@ const verifyAuth = async (ctx, next) => {
 
 }
 
+// 验证用户权限(设计的更有通用性)
+const verifyUserPermit = async (ctx, next) => {
+    console.log('验证权限的中间件')
+    const id = ctx.user.id;
+    const commentId = ctx.params.momentId;
+    try {
+        const isPermission = await authService.checkMoment(id, commentId);
+        if (!isPermission) throw new Error();
+        await next();
+    } catch (err) {
+        const error = new Error(errorType.UNPERMISSION);
+        ctx.app.emit('error', error, ctx);
+    }
+}
+
 module.exports = {
     verifyLogin,
-    verifyAuth
+    verifyAuth,
+    verifyUserPermit,
 }

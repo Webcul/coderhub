@@ -24,6 +24,15 @@ class MomentController {
         const res = await momentService.getMomentList(offest, size);
         ctx.body = res;
     }
+    // 修改动态
+    async update(ctx, next) {
+        // 1.获取当前动态id
+        const id = ctx.params.momentId;
+        // 2.动态内容
+        const content = ctx.request.body.content;
+        const res = await momentService.update(id, content);
+        ctx.body = res;
+    }
 }
 
 module.exports = new MomentController();
