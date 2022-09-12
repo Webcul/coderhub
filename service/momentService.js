@@ -35,6 +35,16 @@ class momentService {
             console.log(e)
         }
     }
+    // 删除动态
+    async delMoment(id) {
+       try {
+           const statement = `DELETE FROM moment WHERE id = ?;`;
+           const [ res ] = await connection.execute(statement, [id]);
+           return res;
+       } catch (e) {
+           console.log(e);
+       }
+    }
 }
 
 module.exports = new momentService();

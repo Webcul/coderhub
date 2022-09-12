@@ -33,6 +33,12 @@ class MomentController {
         const res = await momentService.update(id, content);
         ctx.body = res;
     }
+    // 删除动态
+    async delMoment(ctx, next) {
+        const id = ctx.params.momentId;
+        const res = await momentService.delMoment(id);
+        ctx.body = res;
+    }
 }
 
 module.exports = new MomentController();

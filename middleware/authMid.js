@@ -55,6 +55,9 @@ const verifyAuth = async (ctx, next) => {
 }
 
 // 验证用户权限(设计的更有通用性)
+/*
+* 业务接口
+* */
 const verifyUserPermit = async (ctx, next) => {
     console.log('验证权限的中间件')
     const id = ctx.user.id;
