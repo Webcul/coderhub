@@ -15,7 +15,7 @@ const verifyUser = async (ctx, next) => {
 
     //3. 判断此用户名是否已经注册（异步）
     const result = await service.getUserByName(name);
-    console.log(result.length)
+    // console.log(result.length)
     if (result.length > 0) {
         const error = new Error(errorType.USER_ALREADY_EXISTS);
         return ctx.app.emit('error', error, ctx);

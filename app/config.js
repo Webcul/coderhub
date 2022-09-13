@@ -9,7 +9,7 @@ dotenv.config();
 let PRIVATE_KEY = fs.readFileSync('./private.key');
 let PUBLIC_KEY = fs.readFileSync('./public.key');
 
-console.log(process.env.APP_PORT)
+// console.log(process.env.APP_PORT)
 module.exports = {
     APP_PORT,
 } = process.env;

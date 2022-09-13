@@ -6,7 +6,7 @@ const mysql = require('mysql2');
 // 创建连接池
 const connection = mysql.createPool({
     host: 'localhost',
-    database: 'coderhub',
+    database: 'coderhub2',
     user: 'root',
     password: 'root',
     connectionLimit: 10,
