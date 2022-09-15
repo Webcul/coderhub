@@ -20,6 +20,17 @@ class CommentService {
             console.log(e);
         }
     }
+    // 修改贴子
+    async update(commentId, content) {
+        try {
+            const statement = `UPDATE comment SET content = '${content}' WHERE id = ${commentId};`;
+            const [res] = await connection.execute(statement);
+            // console.log(res);
+            return res;
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 module.exports = new CommentService();

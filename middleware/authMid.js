@@ -57,13 +57,36 @@ const verifyAuth = async (ctx, next) => {
 // 验证用户权限(设计的更有通用性)
 /*
 * 业务接口
+* issue: 这里需要一个表名作为参数。
+* 实现方式一： 将verifyUserPermit变成一个函数，用闭包思想做
+* 实现方式二：接口是按照restful风格写的，修改接口后面跟`${表名}Id`，这样就可以获取到表名
 * */
+// const verifyUserPermit = (tableName) => {
+//     return async (ctx, next) => {
+//         console.log('验证权限的中间件')
+//         const userId = ctx.user.id;
+//         const id = ctx.params.momentId;
+//         try {
+//             const isPermission = await authService.checkResource(tableName, userId, id);
+//             if (!isPermission) throw new Error();
+//             await next();
+//         } catch (err) {
+//             const error = new Error(errorType.UNPERMISSION);
+//             ctx.app.emit('error', error, ctx);
+//         }
+//     }
+// }
 const verifyUserPermit = async (ctx, next) => {
     console.log('验证权限的中间件')
-    const id = ctx.user.id;
-    const commentId = ctx.params.momentId;
+    const userId = ctx.user.id;
+
+    const [resourceKey] = Object.keys(ctx.params);
+    const tableName = resourceKey.replace('Id', '');
+
+    const id = ctx.params[resourceKey];
+
     try {
-        const isPermission = await authService.checkMoment(id, commentId);
+        const isPermission = await authService.checkResource(tableName, userId, id);
         if (!isPermission) throw new Error();
         await next();
     } catch (err) {

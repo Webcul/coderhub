@@ -16,6 +16,13 @@ class CommentController {
         const res = await service.reply(content, momentId, userId, commentId);
         ctx.body = res;
     }
+    // 修改评论
+    async update(ctx, next) {
+        const { commentId } = ctx.params;
+        const { content } = ctx.request.body;
+        const res = await service.update(commentId, content);
+        ctx.body = res;
+    }
 }
 
 module.exports = new CommentController();
