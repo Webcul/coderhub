@@ -41,10 +41,14 @@ class CommentService {
             console.log(e);
         }
     }
-    // 获取评论信息
+    // 获取评论信息 不仅要获取评论信息，也要拿到评论人
     async getCommentByMomentId(momentId) {
         try {
-            const statement = `select * from comment where moment_id = ?`;
+            const statement = `SELECT c.id id, c.content content, c.comment_id commentId, c.createAt createAt, c.updateAt updateAt,
+            JSON_OBJECT('userId', u.id, 'userName', u.name) commentUser
+            FROM COMMENT c 
+            LEFT JOIN USER u ON u.id=c.user_id
+            WHERE moment_id = ?;`;
             const [res] = await connection.execute(statement, [momentId]);
             return res;
         } catch (e) {
