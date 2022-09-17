@@ -29,6 +29,12 @@ class CommentController {
         const res = await service.remove(commentId);
         ctx.body = res;
     }
+    // 获取评论接口
+    async list(ctx, next) {
+        const {momentId} = ctx.query;
+        const res = await service.getCommentByMomentId(momentId);
+        ctx.body = res;
+    }
 }
 
 module.exports = new CommentController();

@@ -19,7 +19,8 @@ class momentService {
     }
     // 获取所有用户动态
     async getMomentList(offest, size) {
-        const statement = `SELECT m.id id, m.content content, m.createAt createAt, m.updateAt updateAt, JSON_OBJECT('id', u.id, 'name', u.name) user
+        const statement = `SELECT m.id id, m.content content, m.createAt createAt, m.updateAt updateAt, JSON_OBJECT('id', u.id, 'name', u.name) user,
+                            (select count(*) from comment c where c.moment_id = m.id) commentCount
                             FROM moment m LEFT JOIN user u on m.user_id = u.id limit ?, ?;`;
         const res = await connection.execute(statement, [offest, size]);
         return res[0];

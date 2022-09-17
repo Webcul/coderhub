@@ -41,6 +41,16 @@ class CommentService {
             console.log(e);
         }
     }
+    // 获取评论信息
+    async getCommentByMomentId(momentId) {
+        try {
+            const statement = `select * from comment where moment_id = ?`;
+            const [res] = await connection.execute(statement, [momentId]);
+            return res;
+        } catch (e) {
+            console.log(e);
+        }
+    }
 }
 
 module.exports = new CommentService();
