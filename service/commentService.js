@@ -31,6 +31,16 @@ class CommentService {
             console.log(e)
         }
     }
+    // 删除贴子
+    async remove(commentId) {
+        try {
+            const statement = `delete from comment where id = ?`;
+            const [res] = await connection.execute(statement, [ commentId ]);
+            return res;
+        } catch (e) {
+            console.log(e);
+        }
+    }
 }
 
 module.exports = new CommentService();

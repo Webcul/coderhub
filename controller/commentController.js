@@ -23,6 +23,12 @@ class CommentController {
         const res = await service.update(commentId, content);
         ctx.body = res;
     }
+    // 删除评论
+    async remove(ctx, next) {
+        const { commentId } = ctx.params;
+        const res = await service.remove(commentId);
+        ctx.body = res;
+    }
 }
 
 module.exports = new CommentController();
