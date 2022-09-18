@@ -12,16 +12,23 @@ class momentService {
     }
     // 获取单个用户动态
     async getMomentById(id) {
-        const statement = `SELECT m.id id, m.content content, m.createAt createAt, m.updateAt updateAt, JSON_OBJECT('id', u.id, 'name', u.name) user
-                            FROM moment m LEFT JOIN user u on m.user_id = u.id WHERE m.user_id = ?;`;
+        const statement = `SELECT m.id id, m.content content, m.createAt createAt, m.updateAt updateAt,
+                            JSON_OBJECT('id', u.id, 'name', u.name) USER,
+                            JSON_ARRAYAGG(JSON_OBJECT('id', l.id, 'name', l.name)) labels
+                            FROM moment m 
+                            LEFT JOIN USER u ON m.user_id = u.id
+                            LEFT JOIN moment_label ml ON ml.moment_id = m.id
+                            LEFT JOIN label l ON ml.label_id = l.id
+                            WHERE m.id = ?;`;
         const res = await connection.execute(statement, [id]);
         return res[0];
     }
     // 获取所有用户动态
     async getMomentList(offest, size) {
-        const statement = `SELECT m.id id, m.content content, m.createAt createAt, m.updateAt updateAt, JSON_OBJECT('id', u.id, 'name', u.name) user,
-                            (select count(*) from comment c where c.moment_id = m.id) commentCount
-                            FROM moment m LEFT JOIN user u on m.user_id = u.id limit ?, ?;`;
+        const statement = `SELECT m.id id, m.content content, m.createAt createAt, m.updateAt updateAt, JSON_OBJECT('id', u.id, 'name', u.name) USER,
+                            (SELECT COUNT(*) FROM COMMENT c WHERE c.moment_id = m.id) commentCount,
+                            (SELECT COUNT(*) FROM moment_label ml WHERE ml.moment_id = m.id) labelCount
+                            FROM moment m LEFT JOIN USER u ON m.user_id = u.id LIMIT ?, ?;`;
         const res = await connection.execute(statement, [offest, size]);
         return res[0];
     }
