@@ -46,6 +46,23 @@ class momentService {
            console.log(e);
        }
     }
+
+    //判断是否已经有关联
+    async hasLabel(momentId, labelId) {
+        try {
+            const statement = `select * from moment_label where moment_id = ? and label_id = ?`;
+            const [res] = await connection.execute(statement, [momentId, labelId]);
+            return res[0] ? true :false;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    //向关系表增加关系
+    async addLabel(momentId, labelId) {
+        const statement = `insert into moment_label(moment_id, label_id) values(?, ?)`;
+        const [res] = await connection.execute(statement, [momentId, labelId]);
+        return res;
+    }
 }
 
 module.exports = new momentService();
