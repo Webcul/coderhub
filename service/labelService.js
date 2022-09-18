@@ -16,6 +16,12 @@ class LabelService {
         const [res] = await connection.execute(statement, [tagName]);
         return res[0];
     }
+    // 获取标签
+    async getLabelList(limit, offset) {
+        const statement = `select * from label limit ?, ?`;
+        const [res] = await connection.execute(statement, [offset, limit]);
+        return res;
+    }
 }
 
 
